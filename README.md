@@ -1,6 +1,6 @@
-# Testing dbt project: `jaffle_shop`
+# Testing dbt project: `craft_beers`
 
-`jaffle_shop` is a fictional ecommerce store. This dbt project transforms raw data from an app database into a customers and orders model ready for analytics.
+`craft_beers` is a fictional brewery shop. This dbt project transforms raw data from an app database into a customers and orders model ready for analytics.
 
 <details>
 <summary>
@@ -9,18 +9,11 @@
 
 </summary>
 
-What this repo _is_:
+Business: A small brewery selling various craft beers online and in-store.
 
-- A self-contained playground dbt project, useful for testing out scripts, and communicating some of the core dbt concepts.
+Data: raw_beers, raw_customers, raw_orders, raw_payments, raw_brewery_inventory.
 
-What this repo _is not_:
-
-- A tutorial — check out the [Getting Started Tutorial](https://docs.getdbt.com/tutorial/setting-up) for that. Notably, this repo contains some anti-patterns to make it self-contained, namely the use of seeds instead of sources.
-- A demonstration of best practices — check out the [dbt Learn Demo](https://github.com/dbt-labs/dbt-learn-demo) repo instead. We want to keep this project as simple as possible. As such, we chose not to implement:
-  - our standard file naming patterns (which make more sense on larger projects, rather than this five-model project)
-  - a pull request flow
-  - CI/CD integrations
-- A demonstration of using dbt for a high-complex project, or a demo of advanced features (e.g. macros, packages, hooks, operations) — we're just trying to keep things simple here!
+Focus: Inventory management, sales trends by beer type, customer demographics, and order fulfillment.
 
 </details>
 
@@ -31,11 +24,11 @@ What this repo _is not_:
 
 </summary>
 
-This repo contains [seeds](https://docs.getdbt.com/docs/building-a-dbt-project/seeds) that includes some (fake) raw data from a fictional app along with some basic dbt [models](https://docs.getdbt.com/docs/building-a-dbt-project/building-models), tests, and docs for this data.
+This repo contains [seeds](https://docs.getdbt.com/docs/building-a-dbt-project/seeds) that includes some (fake) raw data from a fictional brewery app along with some basic dbt [models](https://docs.getdbt.com/docs/building-a-dbt-project/building-models), tests, and docs for this data.
 
-The raw data consists of customers, orders, and payments, with the following entity-relationship diagram:
+The raw data consists of beers, customers, orders, and payments, with the following entity-relationship diagram:
 
-![Jaffle Shop ERD](/etc/jaffle_shop_erd.png)
+![Brewery Shop ERD](/etc/jaffle_shop_erd.png)
 
 </details>
 

@@ -1,9 +1,9 @@
-name: 'jaffle_shop'
+name: 'craft_beers'
 
 config-version: 2
 version: '0.1'
 
-profile: 'jaffle_shop'
+profile: 'craft_beers'
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
