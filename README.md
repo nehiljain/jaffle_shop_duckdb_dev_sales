@@ -1,6 +1,6 @@
-# Testing dbt project: `craft_beers`
+# Testing dbt project: `craft-beers`
 
-`craft_beers` is a fictional brewery shop. This dbt project transforms raw data from an app database into a customers and orders model ready for analytics.
+`craft-beers` is a fictional brewery shop. This dbt project transforms raw data from an app database into a customers and orders model ready for analytics.
 
 <details>
 <summary>

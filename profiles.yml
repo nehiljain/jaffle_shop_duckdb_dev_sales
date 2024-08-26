@@ -1,4 +1,4 @@
-craft_beers:
+craft-beers:
 
   target: dev
   outputs:

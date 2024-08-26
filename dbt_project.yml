@@ -1,9 +1,9 @@
-name: 'craft_beers'
+name: 'craft-beers'
 
 config-version: 2
 version: '0.1'
 
-profile: 'craft_beers'
+profile: 'craft-beers'
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
@@ -24,7 +24,7 @@ seeds:
     node_color: '#cd7f32'
 
 models:
-  jaffle_shop:
+  craft_beers:
     materialized: table
     staging:
       materialized: view

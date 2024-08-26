@@ -2,7 +2,7 @@
 
 ## Data Documentation for Jaffle Shop
 
-`jaffle_shop` is a fictional ecommerce store.
+Brewery Shop (Craft Beer):
 
 This [dbt](https://www.getdbt.com/) project is for testing out code.
 
