@@ -1,9 +1,9 @@
 select
     id as order_id,
-    user_id as customer_id,
+    customer_id,
     order_date,
     status,
-    beer_type,
+    beer_id,
     quantity
 
 from {{ ref('raw_orders') }}
