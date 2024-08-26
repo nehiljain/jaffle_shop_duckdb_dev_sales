@@ -1,6 +1,6 @@
-beer_id,beer_type,stock_level,price_per_unit
-1,IPA,120,5.00
-2,Lager,200,4.50
-3,Stout,150,5.50
-4,Pilsner,180,4.75
-5,Porter,100,5.25
+beer_id,beer_name,beer_type,stock_level,price_per_unit
+1,Hoppy Heaven,IPA,120,5.00
+2,Golden Lager,Lager,200,4.50
+3,Dark Delight,Stout,150,5.50
+4,Crisp Pilsner,Pilsner,180,4.75
+5,Robust Porter,Porter,100,5.25
