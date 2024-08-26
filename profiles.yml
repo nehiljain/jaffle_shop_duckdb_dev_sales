@@ -4,5 +4,5 @@ craft_beers:
   outputs:
     dev:
       type: duckdb
-      path: 'jaffle_shop.duckdb'
+      path: 'test8_craft_beers.duckdb'
       threads: 24
