@@ -28,6 +28,8 @@ Think about all the analytics required to help manager of the brewery shop.
 Business: A small brewery selling various craft beers online and in-store.  
 Data: raw_beers, raw_customers, raw_orders, raw_payments, raw_brewery_inventory.  
 Focus: Inventory management, sales trends by beer type, customer demographics, and order fulfillment.
+ 
+Make sure to add all the relevant models to staging with cover the new csv data and correct columns in staging models.
 """),
 
 ("""Make sure to add all the relevant files for new `seeds` that are not in `models/staging/schema.yml` and `models`."""),

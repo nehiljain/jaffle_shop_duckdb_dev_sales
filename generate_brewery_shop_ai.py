@@ -84,7 +84,6 @@ for i, step in enumerate(execution_plan):
         # Check if edit_filenames match any of the items in all_filenames, if not create an empty file
         for filename in edit_filenames:
             if not any(filename in filepath for filepath in all_filenames):
-                print(f"{filename} doesn't exist and WILL BE CREATED")
                 abs_path = os.path.abspath(filename)
                 os.makedirs(os.path.dirname(abs_path), exist_ok=True)
                 with open(abs_path, 'w') as f:
@@ -96,16 +95,6 @@ for i, step in enumerate(execution_plan):
                 # Add the new file to the filenames in Coder
                 coder.add_rel_fname(filename)
                 # Update the repo map with the new file
-                new_msg = f"Recreate the response for skipped files now that they are created and available for edits. Here is your previous response: \n {response}"
+                new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
                 coder.run(new_msg)
-    if i > 5:
-        break
-
-# # This will execute one instruction on those files and then return
-# coder.run("make a script that prints hello world")
-
-# # Send another instruction
-# coder.run("make it say goodbye")
-
-# # You can run in-chat "/" commands too
-# coder.run("/tokens")
+    
