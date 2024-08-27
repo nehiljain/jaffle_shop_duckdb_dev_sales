@@ -21,65 +21,64 @@ def find_files_by_regex(directory, pattern):
     regex = re.compile(pattern)
     return [str(file.relative_to(directory)) for file in Path(directory).rglob('*') if regex.match(file.name) and 'venv' not in file.parts and 'target' not in file.parts and not any(part.startswith('.') for part in file.parts)]
 
-config_filenames = find_files_by_regex(os.getcwd(), r'.*\.(yml|yaml)$')
-docs_filenames = find_files_by_regex(os.getcwd(), r'.*\.md$')
-staging_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.(sql|md|yml)$')
-staging_models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.sql$')
-models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models'), r'.*\.sql$')
-all_filenames = find_files_by_regex(os.getcwd(), r'.*\.(sql|md|yml|yaml|csv)$')
-file_categories = {
-    "Config Files": config_filenames,
-    "Docs Files": docs_filenames,
-    "Staging Files": staging_filenames,
-    "Staging Models Files": staging_models_filenames,
-    "Models Files": models_filenames,
-    "All Files": all_filenames
-}
+def generate_code():
+    config_filenames = find_files_by_regex(os.getcwd(), r'.*\.(yml|yaml)$')
+    docs_filenames = find_files_by_regex(os.getcwd(), r'.*\.md$')
+    staging_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.(sql|md|yml)$')
+    staging_models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.sql$')
+    models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models'), r'.*\.sql$')
+    all_filenames = find_files_by_regex(os.getcwd(), r'.*\.(sql|md|yml|yaml|csv)$')
+    file_categories = {
+        "Config Files": config_filenames,
+        "Docs Files": docs_filenames,
+        "Staging Files": staging_filenames,
+        "Staging Models Files": staging_models_filenames,
+        "Models Files": models_filenames,
+        "All Files": all_filenames
+    }
 
-for category, filenames in file_categories.items():
-    print(f"{category}:")
-    for filename in filenames:
-        print(f"  - {filename}")
-
-
-model = Model(
-    "gpt-4o-2024-08-06",
-    weak_model="gpt-4o-mini"
-)
-model.edit_format = "diff"
-model.use_repo_map = True
-model.accepts_images = True
-model.lazy = True
-model.reminder = "sys"
-
-# # Create a coder object
-coder = Coder.create(auto_lint=False, main_model=model, fnames=all_filenames)
+    for category, filenames in file_categories.items():
+        print(f"{category}:")
+        for filename in filenames:
+            print(f"  - {filename}")
 
 
+    model = Model(
+        "gpt-4o-2024-08-06",
+        weak_model="gpt-4o-mini"
+    )
+    model.edit_format = "diff"
+    model.use_repo_map = True
+    model.accepts_images = True
+    model.lazy = True
+    model.reminder = "sys"
 
-# Run git checkout to switch to the new branch
-checkout_command = f"git checkout -b {branch_name}-brewery-shop-example"
-print(f"Running shell command: {checkout_command}")
-os.system(checkout_command)
+    # # Create a coder object
+    coder = Coder.create(auto_lint=False, main_model=model, fnames=all_filenames)
+
+    # Run git checkout to switch to the new branch
+    checkout_command = f"git checkout -b {branch_name}-brewery-shop-example"
+    print(f"Running shell command: {checkout_command}")
+    os.system(checkout_command)
 
 
-for i, step in enumerate(execution_plan):
-    print(step)
-    response = coder.run(step)
-    print("~~"*100)
-    print(response)
-    print("~~"*100)
-    if response:
-    #     # Check if the response contains a shell command
-    #     shell_command_match = re.search(r'```bash\n(.*?)\n```', response, re.DOTALL)
-    #     if shell_command_match:
-    #         shell_command = shell_command_match.group(1).strip()
-    #         print(f"Running shell command: {shell_command}")
-    #         coder.handle_shell_commands(shell_command)
-        edit_filenames = extract_filenames(response)
+    for i, step in enumerate(execution_plan):
+        print(step)
+        response = coder.run(step)
         print("~~"*100)
-        print(f"Filenames being edited {edit_filenames}")
+        print(response)
         print("~~"*100)
+        if response:
+        #     # Check if the response contains a shell command
+        #     shell_command_match = re.search(r'```bash\n(.*?)\n```', response, re.DOTALL)
+        #     if shell_command_match:
+        #         shell_command = shell_command_match.group(1).strip()
+        #         print(f"Running shell command: {shell_command}")
+        #         coder.handle_shell_commands(shell_command)
+            edit_filenames = extract_filenames(response)
+            print("~~"*100)
+            print(f"Filenames being edited {edit_filenames}")
+            print("~~"*100)
 
         # Check if edit_filenames match any of the items in all_filenames, if not create an empty file
         for filename in edit_filenames:
@@ -97,4 +96,6 @@ for i, step in enumerate(execution_plan):
                 # Update the repo map with the new file
                 new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
                 coder.run(new_msg)
-    
+
+if __name__ == "__main__":
+    generate_code()
