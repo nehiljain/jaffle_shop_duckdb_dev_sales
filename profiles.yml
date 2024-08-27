@@ -1,8 +1,8 @@
-jaffle_shop:
+instamart_bathroom_supplies_delivery:
 
   target: dev
   outputs:
     dev:
       type: duckdb
-      path: 'jaffle_shop.duckdb'
+      path: 'instamart_bathroom_supplies_delivery.duckdb'
       threads: 24

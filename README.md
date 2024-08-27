@@ -1,6 +1,6 @@
-# Testing dbt project: `jaffle_shop`
+# Testing dbt project: `instamart_bathroom_supplies_delivery`
 
-`jaffle_shop` is a fictional ecommerce store. This dbt project transforms raw data from an app database into a customers and orders model ready for analytics.
+`instamart_bathroom_supplies_delivery` is a service providing bathroom products delivery from local stores to customers. This dbt project transforms raw data from an app database into a customers and orders model ready for analytics.
 
 <details>
 <summary>

@@ -1,9 +1,9 @@
-name: 'jaffle_shop'
+name: 'instamart_bathroom_supplies_delivery'
 
 config-version: 2
 version: '0.1'
 
-profile: 'jaffle_shop'
+profile: 'instamart_bathroom_supplies_delivery'
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
@@ -24,7 +24,7 @@ seeds:
     node_color: '#cd7f32'
 
 models:
-  jaffle_shop:
+  instamart_bathroom_supplies_delivery:
     materialized: table
     staging:
       materialized: view
