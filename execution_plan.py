@@ -1,17 +1,12 @@
-branch_name = "test1"
 
-project_name="instamart_bathroom_products"
-requirements = """
-InstaMART Bathrooom Products Delivery Service:
+def load_requirements(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
 
-Business: A service providing bathroom products delivery from local stores to customers. iOS APP
-Data: raw_customers, raw_orders, raw_products, raw_stores, raw_deliveries.
-It only sells 15 bathroom products.
-Focus: Delivery times, product availability, customer order frequency, and product popularity.
-"""
+def create_execution_plan(branch_name, project_name, requirements):
 
+    execution_plan = [
 
-execution_plan = [
 
 ("""Can you explain to me what the repo is for? `README.md` should have some context for you"""),
 
@@ -49,5 +44,6 @@ Pay attention to the column names of the staging models and how you reference th
 Modify the readme/docs/config files to reflect the name '{project_name}' instead of jaffle shop. The description is \n {requirements}
 """),
 
-(f"""Lets get Data Documentation for {project_name} complete. Look at all the md and yml files to make sure dbt docs have coverage for all the models and seeds and data. Modify docs in `models/docs.md` or `models/overview.md`. Make sure there are no duplicate blocks. Explain the business use cases. The old jaffle shop was a ecommerce store but the new {project_name} has a description of \n {requirements}"""),
-]
+    ]
+
+    return execution_plan

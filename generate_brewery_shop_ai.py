@@ -1,6 +1,6 @@
 from aider.coders import Coder
 from aider.models import Model
-from execution_plan import execution_plan, branch_name, project_name, requirements
+from execution_plan import create_execution_plan, load_requirements
 import os
 
 # This is a list of files to add to the chat
@@ -57,7 +57,8 @@ def swap_cleaned_csvs(coder):
     coder.run(f"Replace the ref('raw_') with ref('cleaned_raw_') in the following files as the name of the seed csvs as changed: {staging_models_filenames}")
 
 
-def check_success_dbt_build():
+
+def check_success_dbt_build(coder):
     success = False
     counter = 0
     while not success:
@@ -100,77 +101,76 @@ def find_files_by_regex(directory, pattern):
     regex = re.compile(pattern)
     return [str(file.relative_to(directory)) for file in Path(directory).rglob('*') if regex.match(file.name) and 'venv' not in file.parts and 'target' not in file.parts and not any(part.startswith('.') for part in file.parts)]
 
-config_filenames = find_files_by_regex(os.getcwd(), r'.*\.(yml|yaml)$')
-docs_filenames = find_files_by_regex(os.getcwd(), r'.*\.md$')
-staging_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.(sql|md|yml)$')
-staging_models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.sql$')
-models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models'), r'.*\.sql$')
-all_filenames = find_files_by_regex(os.getcwd(), r'.*\.(sql|md|yml|yaml|csv)$')
-file_categories = {
-    "Config Files": config_filenames,
-    "Docs Files": docs_filenames,
-    "Staging Files": staging_filenames,
-    "Staging Models Files": staging_models_filenames,
-    "Models Files": models_filenames,
-    "All Files": all_filenames
-}
 
-for category, filenames in file_categories.items():
-    print(f"{category}:")
-    for filename in filenames:
-        print(f"  - {filename}")
+def generate_code(branch_name, project_name, requirements_file):
+    requirements = load_requirements(requirements_file)
+    execution_plan = create_execution_plan(branch_name, project_name, requirements)
+    config_filenames = find_files_by_regex(os.getcwd(), r'.*\.(yml|yaml)$')
+    docs_filenames = find_files_by_regex(os.getcwd(), r'.*\.md$')
+    staging_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.(sql|md|yml)$')
+    staging_models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.sql$')
+    models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models'), r'.*\.sql$')
+    all_filenames = find_files_by_regex(os.getcwd(), r'.*\.(sql|md|yml|yaml|csv)$')
+    file_categories = {
+        "Config Files": config_filenames,
+        "Docs Files": docs_filenames,
+        "Staging Files": staging_filenames,
+        "Staging Models Files": staging_models_filenames,
+        "Models Files": models_filenames,
+        "All Files": all_filenames
+    }
 
-
-model = Model(
-    "gpt-4o-2024-08-06",
-    weak_model="gpt-4o-mini"
-)
-model.edit_format = "diff"
-model.use_repo_map = True
-model.accepts_images = True
-model.lazy = True
-model.reminder = "sys"
-
-# # Create a coder object
-coder = Coder.create(auto_lint=False, main_model=model, fnames=all_filenames)
+    for category, filenames in file_categories.items():
+        print(f"{category}:")
+        for filename in filenames:
+            print(f"  - {filename}")
 
 
+    model = Model(
+        "gpt-4o-2024-08-06",
+        weak_model="gpt-4o-mini"
+    )
+    model.edit_format = "diff"
+    model.use_repo_map = True
+    model.accepts_images = True
+    model.lazy = True
+    model.reminder = "sys"
 
-# Run git checkout to switch to the new branch
-checkout_command = f"git checkout -b {branch_name}-{project_name}-example"
-print(f"Running shell command: {checkout_command}")
-os.system(checkout_command)
+    # # Create a coder object
+    coder = Coder.create(auto_lint=False, main_model=model, fnames=all_filenames)
 
+    # Run git checkout to switch to the new branch
+    checkout_command = f"git checkout -b {branch_name}-brewery-shop-example"
+    print(f"Running shell command: {checkout_command}")
+    os.system(checkout_command)
 
-for i, step in enumerate(execution_plan):
-    response = coder.run(step)
-    any_new_files = False
-    if response:
-        edit_filenames = extract_filenames(response)
+    for i, step in enumerate(execution_plan):
+        response = coder.run(step)
+        any_new_files = False
+        if response:
+            edit_filenames = extract_filenames(response)
+            for filename in edit_filenames:
+                if not any(filename in filepath for filepath in all_filenames):
+                    # Check if the file is a CSV or SQL file and if it is inside the seeds or models folder
+                    if (filename.endswith('.csv') or filename.endswith('.sql')) and ('seeds' in filename or 'models' in filename):
+                        abs_path = os.path.abspath(filename)
+                        os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+                        with open(abs_path, 'w') as f:
+                            pass
+                        any_new_files = True
+                        # Add the new file to git tracking
+                        git_add_command = f"git add {abs_path}"
+                        print(f"Running shell command: {git_add_command}")
+                        os.system(git_add_command)
+                        # Add the new file to the filenames in Coder
+                        coder.add_rel_fname(filename)
 
-        # Check if edit_filenames match any of the items in all_filenames, if not create an empty file
-        for filename in edit_filenames:
-            if not any(filename in filepath for filepath in all_filenames):
-                # Check if the file is a CSV or SQL file and if it is inside the seeds or models folder
-                if (filename.endswith('.csv') or filename.endswith('.sql')) and ('seeds' in filename or 'models' in filename):
-                    abs_path = os.path.abspath(filename)
-                    os.makedirs(os.path.dirname(abs_path), exist_ok=True)
-                    with open(abs_path, 'w') as f:
-                        pass
-                    any_new_files = True
-                    # Add the new file to git tracking
-                    git_add_command = f"git add {abs_path}"
-                    print(f"Running shell command: {git_add_command}")
-                    os.system(git_add_command)
-                    # Add the new file to the filenames in Coder
-                    coder.add_rel_fname(filename)
-                    # Update the repo map with the new file
-                
-        if any_new_files:
-            new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
-            coder.run(new_msg)
-        if i % 4 == 0:
-            check_success_dbt_build()
+            if any_new_files:
+                new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
+                coder.run(new_msg)
+        if i%4 == 0:
+            check_success_dbt_build(coder)
+    check_success_dbt_build(coder)
 
-
-check_success_dbt_build()
+if __name__ == "__main__":
+    generate_code()
