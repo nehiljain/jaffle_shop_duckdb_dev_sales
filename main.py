@@ -3,7 +3,7 @@ from generate_brewery_shop_ai import generate_code
 
 @click.group()
 def cli():
-    """/dev/sell CLI Tool"""
+    """/demodrive CLI Tool"""  # Updated project name
     pass
 
 @cli.command()

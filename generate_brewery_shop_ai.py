@@ -140,7 +140,7 @@ def generate_code(branch_name, project_name, requirements_file):
     coder = Coder.create(auto_lint=False, main_model=model, fnames=all_filenames)
 
     # Run git checkout to switch to the new branch
-    checkout_command = f"git checkout -b {branch_name}-brewery-shop-example"
+    checkout_command = f"git checkout -b {branch_name}-{project_name}-example"
     print(f"Running shell command: {checkout_command}")
     os.system(checkout_command)
 
