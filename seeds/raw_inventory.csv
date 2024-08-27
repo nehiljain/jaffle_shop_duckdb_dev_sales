@@ -1,0 +1,7 @@
+id,medication_name,batch_number,expiration_date,quantity
+1,Aspirin,B123,2025-01-01,100
+2,Ibuprofen,B124,2025-02-01,200
+3,Paracetamol,B125,2025-03-01,150
+4,Amoxicillin,B126,2025-04-01,100
+5,Loratadine,B127,2025-05-01,250
+6,Metformin,B128,2025-06-01,300
