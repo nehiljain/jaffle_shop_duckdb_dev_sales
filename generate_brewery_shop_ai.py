@@ -1,11 +1,90 @@
 from aider.coders import Coder
 from aider.models import Model
-from execution_plan import execution_plan, branch_name
+from execution_plan import execution_plan, branch_name, project_name, requirements
 import os
+
 # This is a list of files to add to the chat
 
 import re
 from pathlib import Path
+    
+def clean_csv(input_file, output_file, expected_columns=5):
+    error_lines = []
+    cleaned_lines = []
+
+    with open(input_file, 'r') as file:
+        for line_number, line in enumerate(file, start=1):
+            # Check for irregularities
+            columns = line.split(',')
+            if len(columns) != expected_columns:
+                error_lines.append((line_number, len(columns), line.strip(), "Incorrect number of columns"))
+            else:
+                # Check for inconsistent quoting or special characters
+                if any('"' in col and not col.startswith('"') and not col.endswith('"') for col in columns):
+                    error_lines.append((line_number, len(columns), line.strip(), "Inconsistent quoting or special characters"))
+                else:
+                    cleaned_lines.append(line)
+
+    # Write cleaned content to the new file
+    with open(output_file, 'w') as clean_file:
+        for line in cleaned_lines:
+            clean_file.write(line)
+
+    return error_lines, output_file
+
+
+def swap_cleaned_csvs(coder):
+    # Get all CSV files in the ./seeds/ directory
+    csv_files = list(Path('./seeds/').rglob('*.csv'))
+
+    for csv_file in csv_files:
+        input_file_path = str(csv_file)
+        output_file_path = str(csv_file.parent / f"cleaned_{csv_file.name}")
+
+        # Clean the CSV file and get error lines
+        errors, cleaned_file = clean_csv(input_file_path, output_file_path)
+
+        if errors:
+            print(f"Irregularities found in the following lines of {input_file_path}:")
+            for error in errors:
+                print(f"Line {error[0]}: {error[2]}")
+        else:
+            print(f"No irregularities found in {input_file_path}. Cleaned file saved to {cleaned_file}.")
+            # Remove the old file
+            os.remove(input_file_path)
+        
+    staging_models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.sql$')
+    coder.run(f"Replace the ref('raw_') with ref('cleaned_raw_') in the following files as the name of the seed csvs as changed: {staging_models_filenames}")
+
+
+def check_success_dbt_build():
+    success = False
+    counter = 0
+    while not success:
+        dbt_build_response = coder.run("/run dbt build")
+        # Define the regex pattern to find the number of errors
+        error_pattern = re.compile(r'\bERROR=(\d+)')
+
+        # Search for the pattern in the log message
+        match = error_pattern.search(dbt_build_response)
+        if match:
+            error_count = int(match.group(1))
+            if error_count > 0:
+                print("Error found in dbt build log message.")
+            else:
+                print("No error found in dbtlog message.")
+            if 'raw_' in dbt_build_response:
+                swap_cleaned_csvs(coder)
+            else:
+                coder.run(f"Fix the error in code. When I run dbt build I get the following error: \n {dbt_build_response}")
+        else:
+            print("No error information found in log message.")
+            success = True
+        counter += 1
+        if counter > 5:
+            break
+    
+    return success
 
 
 def extract_filenames(response):
@@ -62,40 +141,36 @@ def generate_code():
     os.system(checkout_command)
 
 
-    for i, step in enumerate(execution_plan):
-        print(step)
-        response = coder.run(step)
-        print("~~"*100)
-        print(response)
-        print("~~"*100)
-        if response:
-        #     # Check if the response contains a shell command
-        #     shell_command_match = re.search(r'```bash\n(.*?)\n```', response, re.DOTALL)
-        #     if shell_command_match:
-        #         shell_command = shell_command_match.group(1).strip()
-        #         print(f"Running shell command: {shell_command}")
-        #         coder.handle_shell_commands(shell_command)
-            edit_filenames = extract_filenames(response)
-            print("~~"*100)
-            print(f"Filenames being edited {edit_filenames}")
-            print("~~"*100)
 
-        # Check if edit_filenames match any of the items in all_filenames, if not create an empty file
-        for filename in edit_filenames:
-            if not any(filename in filepath for filepath in all_filenames):
-                abs_path = os.path.abspath(filename)
-                os.makedirs(os.path.dirname(abs_path), exist_ok=True)
-                with open(abs_path, 'w') as f:
-                    pass
-                # Add the new file to git tracking
-                git_add_command = f"git add {abs_path}"
-                print(f"Running shell command: {git_add_command}")
-                os.system(git_add_command)
-                # Add the new file to the filenames in Coder
-                coder.add_rel_fname(filename)
-                # Update the repo map with the new file
+
+    for i, step in enumerate(execution_plan):
+        response = coder.run(step)
+        any_new_files = False
+        if response:
+            edit_filenames = extract_filenames(response)
+
+            # Check if edit_filenames match any of the items in all_filenames, if not create an empty file
+            for filename in edit_filenames:
+                if not any(filename in filepath for filepath in all_filenames):
+                    abs_path = os.path.abspath(filename)
+                    os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+                    with open(abs_path, 'w') as f:
+                        pass
+                    any_new_files = True
+                    # Add the new file to git tracking
+                    git_add_command = f"git add {abs_path}"
+                    print(f"Running shell command: {git_add_command}")
+                    os.system(git_add_command)
+                    # Add the new file to the    filenames in Coder
+                    coder.add_rel_fname(filename)
+                    # Update the repo map with the new file    
+            if any_new_files:
                 new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
                 coder.run(new_msg)
+        if i%4 == 0:
+            check_success_dbt_build()
+    check_success_dbt_build()
 
 if __name__ == "__main__":
     generate_code()
+       
