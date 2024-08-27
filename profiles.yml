@@ -4,5 +4,5 @@ pharmacy:
   outputs:
     dev:
       type: duckdb
-      path: 'pharmacy.duckdb'
+      path: 'demo2_live_pharmacy.duckdb'
       threads: 24
