@@ -2,7 +2,7 @@ with inventory as (
 
     select
         inventory_id,
-        medication_name as medication,
+        medication,
         batch_number,
         expiration_date,
         quantity
