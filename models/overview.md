@@ -1,10 +1,10 @@
 {% docs __overview__ %}
 
-## Data Documentation for Jaffle Shop
+## Data Documentation for InstaMART Bathroom Products Delivery Service
 
-`jaffle_shop` is a fictional ecommerce store.
+`InstaMART` is a service providing bathroom products delivery from local stores to customers.
 
-This [dbt](https://www.getdbt.com/) project is for testing out code.
+This [dbt](https://www.getdbt.com/) project focuses on analytics for the manager of the store, including delivery times, product availability, customer order frequency, and product popularity.
 
 The source code can be found [here](https://github.com/clrcrl/jaffle_shop).
 
