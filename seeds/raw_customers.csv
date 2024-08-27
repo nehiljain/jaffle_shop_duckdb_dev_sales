@@ -1,14 +1,14 @@
-id,first_name,last_name
-1,Michael,P.
-2,Shawn,M.
-3,Kathleen,P.
-4,Jimmy,C.
-5,Katherine,R.
-6,Sarah,R.
-7,Martin,M.
-8,Frank,R.
-9,Jennifer,F.
-10,Henry,W.
+id,first_name,last_name,contact_details,address
+1,Michael,P.,michael.p@example.com,123 Elm St
+2,Shawn,M.,shawn.m@example.com,456 Oak St
+3,Kathleen,P.,kathleen.p@example.com,789 Pine St
+4,Jimmy,C.,jimmy.c@example.com,101 Maple St
+5,Katherine,R.,katherine.r@example.com,202 Birch St
+6,Sarah,R.,sarah.r@example.com,303 Cedar St
+7,Martin,M.,martin.m@example.com,404 Spruce St
+8,Frank,R.,frank.r@example.com,505 Walnut St
+9,Jennifer,F.,jennifer.f@example.com,606 Cherry St
+10,Henry,W.,henry.w@example.com,707 Ash St
 11,Fred,S.
 12,Amy,D.
 13,Kathleen,M.
