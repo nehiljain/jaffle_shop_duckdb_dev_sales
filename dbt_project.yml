@@ -1,9 +1,9 @@
-name: 'jaffle_shop'
+name: 'pharmacy'
 
 config-version: 2
 version: '0.1'
 
-profile: 'jaffle_shop'
+profile: 'pharmacy'
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
