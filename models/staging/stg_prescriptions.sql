@@ -9,7 +9,7 @@ renamed as (
     select
         id as prescription_id,
         customer_id,
-        medication_name,
+        medication,
         dosage,
         doctor_approval
 
