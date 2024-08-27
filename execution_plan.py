@@ -1,3 +1,4 @@
+
 def load_requirements(file_path):
     with open(file_path, 'r') as file:
         return file.read()
@@ -5,6 +6,7 @@ def load_requirements(file_path):
 def create_execution_plan(branch_name, project_name, requirements):
 
     execution_plan = [
+
 
 ("""Can you explain to me what the repo is for? `README.md` should have some context for you"""),
 

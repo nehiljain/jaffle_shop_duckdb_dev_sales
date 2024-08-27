@@ -57,6 +57,7 @@ def swap_cleaned_csvs(coder):
     coder.run(f"Replace the ref('raw_') with ref('cleaned_raw_') in the following files as the name of the seed csvs as changed: {staging_models_filenames}")
 
 
+
 def check_success_dbt_build(coder):
     success = False
     counter = 0
@@ -99,6 +100,7 @@ def extract_filenames(response):
 def find_files_by_regex(directory, pattern):
     regex = re.compile(pattern)
     return [str(file.relative_to(directory)) for file in Path(directory).rglob('*') if regex.match(file.name) and 'venv' not in file.parts and 'target' not in file.parts and not any(part.startswith('.') for part in file.parts)]
+
 
 def generate_code(branch_name, project_name, requirements_file):
     requirements = load_requirements(requirements_file)
@@ -172,4 +174,3 @@ def generate_code(branch_name, project_name, requirements_file):
 
 if __name__ == "__main__":
     generate_code()
-       
