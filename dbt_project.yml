@@ -24,7 +24,7 @@ seeds:
     node_color: '#cd7f32'
 
 models:
-  jaffle_shop:
+  pharmacy:
     materialized: table
     staging:
       materialized: view
