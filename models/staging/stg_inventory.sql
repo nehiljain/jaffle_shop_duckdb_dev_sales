@@ -8,7 +8,7 @@ renamed as (
 
     select
         id as inventory_id,
-        medication,
+        medication_name as medication,
         batch_number,
         expiration_date,
         quantity
