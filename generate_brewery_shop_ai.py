@@ -1,6 +1,6 @@
 from aider.coders import Coder
 from aider.models import Model
-from execution_plan import execution_plan, branch_name, project_name, requirements
+from execution_plan import create_execution_plan, load_requirements
 import os
 
 # This is a list of files to add to the chat
@@ -100,7 +100,9 @@ def find_files_by_regex(directory, pattern):
     regex = re.compile(pattern)
     return [str(file.relative_to(directory)) for file in Path(directory).rglob('*') if regex.match(file.name) and 'venv' not in file.parts and 'target' not in file.parts and not any(part.startswith('.') for part in file.parts)]
 
-def generate_code():
+def generate_code(branch_name, project_name, requirements_file):
+    requirements = load_requirements(requirements_file)
+    execution_plan = create_execution_plan(branch_name, project_name, requirements)
     config_filenames = find_files_by_regex(os.getcwd(), r'.*\.(yml|yaml)$')
     docs_filenames = find_files_by_regex(os.getcwd(), r'.*\.md$')
     staging_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.(sql|md|yml)$')
@@ -145,24 +147,28 @@ def generate_code():
         any_new_files = False
         if response:
             edit_filenames = extract_filenames(response)
-
-            # Check if edit_filenames match any of the items in all_filenames, if not create an empty file
             for filename in edit_filenames:
                 if not any(filename in filepath for filepath in all_filenames):
-                    abs_path = os.path.abspath(filename)
-                    os.makedirs(os.path.dirname(abs_path), exist_ok=True)
-                    with open(abs_path, 'w') as f:
-                        pass
-                    any_new_files = True
-                    # Add the new file to the    filenames in Coder
-                    coder.add_rel_fname(filename)
-                    # Update the repo map with the new file    
+                    # Check if the file is a CSV or SQL file and if it is inside the seeds or models folder
+                    if (filename.endswith('.csv') or filename.endswith('.sql')) and ('seeds' in filename or 'models' in filename):
+                        abs_path = os.path.abspath(filename)
+                        os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+                        with open(abs_path, 'w') as f:
+                            pass
+                        any_new_files = True
+                        # Add the new file to git tracking
+                        git_add_command = f"git add {abs_path}"
+                        print(f"Running shell command: {git_add_command}")
+                        os.system(git_add_command)
+                        # Add the new file to the filenames in Coder
+                        coder.add_rel_fname(filename)
+
             if any_new_files:
                 new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
                 coder.run(new_msg)
         if i%4 == 0:
-            check_success_dbt_build()
-    check_success_dbt_build()
+            check_success_dbt_build(coder)
+    check_success_dbt_build(coder)
 
 if __name__ == "__main__":
     generate_code()

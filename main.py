@@ -3,23 +3,17 @@ from generate_brewery_shop_ai import generate_code
 
 @click.group()
 def cli():
-    """/dev/sales CLI Tool"""
+    """/dev/sell CLI Tool"""
     pass
 
 @cli.command()
-@click.option('--code', type=str, help="Path to the code location.")
-@click.option('--usecase_prompt', type=str, help="Description of the use case.")
-def generate(code, usecase_prompt):
+@click.option('--branch_name', type=str, required=True, help="Branch name for the project.")
+@click.option('--project_name', type=str, required=True, help="Project name.")
+@click.option('--requirements_file', type=str, required=True, help="Path to the requirements markdown file.")
+def generate(branch_name, project_name, requirements_file):
     """Generate code based on the provided options."""
-    if not code or not usecase_prompt:
-        click.echo("Error: Both --code and --usecase_prompt are required when --generate is specified.")
-        return
-
-    click.echo(f"Generating code at path: {code}")
-    click.echo(f"Use case prompt: {usecase_prompt}")
     # Add your code generation logic here
-    generate_code()
+    generate_code(branch_name=branch_name, project_name=project_name, requirements_file=requirements_file)
 
 if __name__ == "__main__":
     cli()
-
