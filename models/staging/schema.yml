@@ -29,3 +29,63 @@ models:
         tests:
           - accepted_values:
               values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']
+
+  - name: stg_prescriptions
+    columns:
+      - name: prescription_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: medication_name
+        tests:
+          - not_null
+      - name: dosage
+        tests:
+          - not_null
+      - name: doctor_approval
+        tests:
+          - accepted_values:
+              values: ['approved', 'pending', 'rejected']
+
+  - name: stg_inventory
+    columns:
+      - name: inventory_id
+        tests:
+          - unique
+          - not_null
+      - name: medication_name
+        tests:
+          - not_null
+      - name: batch_number
+        tests:
+          - not_null
+      - name: expiration_date
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+
+  - name: stg_shipments
+    columns:
+      - name: shipment_id
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        tests:
+          - not_null
+      - name: courier
+        tests:
+          - not_null
+      - name: shipment_status
+        tests:
+          - accepted_values:
+              values: ['delivered', 'shipped', 'in_transit', 'pending']
+      - name: delivery_confirmation
+        tests:
+          - accepted_values:
+              values: ['confirmed', 'pending']
