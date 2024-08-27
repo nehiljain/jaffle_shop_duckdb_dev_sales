@@ -1,6 +1,6 @@
 with source as (
 
-    select * from {{ ref('raw_inventory') }}
+    select * from {{ ref('cleaned_raw_inventory') }}
 
 ),
 
