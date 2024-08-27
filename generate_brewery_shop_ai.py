@@ -57,7 +57,7 @@ def swap_cleaned_csvs(coder):
     coder.run(f"Replace the ref('raw_') with ref('cleaned_raw_') in the following files as the name of the seed csvs as changed: {staging_models_filenames}")
 
 
-def check_success_dbt_build():
+def check_success_dbt_build(coder):
     success = False
     counter = 0
     while not success:
