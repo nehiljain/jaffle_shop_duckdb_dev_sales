@@ -140,9 +140,6 @@ def generate_code():
     print(f"Running shell command: {checkout_command}")
     os.system(checkout_command)
 
-
-
-
     for i, step in enumerate(execution_plan):
         response = coder.run(step)
         any_new_files = False
@@ -157,10 +154,6 @@ def generate_code():
                     with open(abs_path, 'w') as f:
                         pass
                     any_new_files = True
-                    # Add the new file to git tracking
-                    git_add_command = f"git add {abs_path}"
-                    print(f"Running shell command: {git_add_command}")
-                    os.system(git_add_command)
                     # Add the new file to the    filenames in Coder
                     coder.add_rel_fname(filename)
                     # Update the repo map with the new file    
