@@ -1,31 +1,29 @@
-version: 2
-
-models:
-  - name: stg_customers
+  - name: stg_products
     columns:
-      - name: customer_id
+      - name: product_id
         tests:
           - unique
           - not_null
+      - name: product_name
+      - name: category
+      - name: price
 
-  - name: stg_orders
+  - name: stg_stores
     columns:
+      - name: store_id
+        tests:
+          - unique
+          - not_null
+      - name: store_name
+      - name: location
+
+  - name: stg_deliveries
+    columns:
+      - name: delivery_id
+        tests:
+          - unique
+          - not_null
       - name: order_id
-        tests:
-          - unique
-          - not_null
-      - name: status
-        tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
-
-  - name: stg_payments
-    columns:
-      - name: payment_id
-        tests:
-          - unique
-          - not_null
-      - name: payment_method
-        tests:
-          - accepted_values:
-              values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']
+      - name: store_id
+      - name: delivery_date
+      - name: delivery_time
