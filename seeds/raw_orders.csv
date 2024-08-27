@@ -9,92 +9,92 @@ id,user_id,order_date,medication_details,status
 8,9,2018-01-11,Omeprazole 20mg,returned
 9,10,2018-01-12,Simvastatin 20mg,completed
 10,1,2018-01-14,Levothyroxine 50mcg,completed
-11,99,2018-01-14,completed
-12,59,2018-01-15,completed
-13,84,2018-01-17,completed
-14,40,2018-01-17,returned
-15,25,2018-01-17,completed
-16,39,2018-01-18,completed
-17,71,2018-01-18,completed
-18,64,2018-01-20,returned
-19,54,2018-01-22,completed
-20,20,2018-01-23,completed
-21,71,2018-01-23,completed
-22,86,2018-01-24,completed
-23,22,2018-01-26,return_pending
-24,3,2018-01-27,completed
-25,51,2018-01-28,completed
-26,32,2018-01-28,completed
-27,94,2018-01-29,completed
-28,8,2018-01-29,completed
-29,57,2018-01-31,completed
-30,69,2018-02-02,completed
-31,16,2018-02-02,completed
-32,28,2018-02-04,completed
-33,42,2018-02-04,completed
-34,38,2018-02-06,completed
-35,80,2018-02-08,completed
-36,85,2018-02-10,completed
-37,1,2018-02-10,completed
-38,51,2018-02-10,completed
-39,26,2018-02-11,completed
-40,33,2018-02-13,completed
-41,99,2018-02-14,completed
-42,92,2018-02-16,completed
-43,31,2018-02-17,completed
-44,66,2018-02-17,completed
-45,22,2018-02-17,completed
-46,6,2018-02-19,completed
-47,50,2018-02-20,completed
-48,27,2018-02-21,completed
-49,35,2018-02-21,completed
-50,51,2018-02-23,completed
-51,71,2018-02-24,completed
-52,54,2018-02-25,return_pending
-53,34,2018-02-26,completed
-54,54,2018-02-26,completed
-55,18,2018-02-27,completed
-56,79,2018-02-28,completed
-57,93,2018-03-01,completed
-58,22,2018-03-01,completed
-59,30,2018-03-02,completed
-60,12,2018-03-03,completed
-61,63,2018-03-03,completed
-62,57,2018-03-05,completed
-63,70,2018-03-06,completed
-64,13,2018-03-07,completed
-65,26,2018-03-08,completed
-66,36,2018-03-10,completed
-67,79,2018-03-11,completed
-68,53,2018-03-11,completed
-69,3,2018-03-11,completed
-70,8,2018-03-12,completed
-71,42,2018-03-12,shipped
-72,30,2018-03-14,shipped
-73,19,2018-03-16,completed
-74,9,2018-03-17,shipped
-75,69,2018-03-18,completed
-76,25,2018-03-20,completed
-77,35,2018-03-21,shipped
-78,90,2018-03-23,shipped
-79,52,2018-03-23,shipped
-80,11,2018-03-23,shipped
-81,76,2018-03-23,shipped
-82,46,2018-03-24,shipped
-83,54,2018-03-24,shipped
-84,70,2018-03-26,placed
-85,47,2018-03-26,shipped
-86,68,2018-03-26,placed
-87,46,2018-03-27,placed
-88,91,2018-03-27,shipped
-89,21,2018-03-28,placed
-90,66,2018-03-30,shipped
-91,47,2018-03-31,placed
-92,84,2018-04-02,placed
-93,66,2018-04-03,placed
-94,63,2018-04-03,placed
-95,27,2018-04-04,placed
-96,90,2018-04-06,placed
-97,89,2018-04-07,placed
-98,41,2018-04-07,placed
-99,85,2018-04-09,placed
+11,99,2018-01-14,Aspirin 100mg,completed
+12,59,2018-01-15,Ibuprofen 200mg,completed
+13,84,2018-01-17,Paracetamol 500mg,completed
+14,40,2018-01-17,Amoxicillin 250mg,returned
+15,25,2018-01-17,Loratadine 10mg,completed
+16,39,2018-01-18,Metformin 500mg,completed
+17,71,2018-01-18,Atorvastatin 10mg,completed
+18,64,2018-01-20,Omeprazole 20mg,returned
+19,54,2018-01-22,Simvastatin 20mg,completed
+20,20,2018-01-23,Levothyroxine 50mcg,completed
+21,71,2018-01-23,Aspirin 100mg,completed
+22,86,2018-01-24,Ibuprofen 200mg,completed
+23,22,2018-01-26,Paracetamol 500mg,return_pending
+24,3,2018-01-27,Amoxicillin 250mg,completed
+25,51,2018-01-28,Loratadine 10mg,completed
+26,32,2018-01-28,Metformin 500mg,completed
+27,94,2018-01-29,Atorvastatin 10mg,completed
+28,8,2018-01-29,Omeprazole 20mg,completed
+29,57,2018-01-31,Simvastatin 20mg,completed
+30,69,2018-02-02,Levothyroxine 50mcg,completed
+31,16,2018-02-02,Aspirin 100mg,completed
+32,28,2018-02-04,Ibuprofen 200mg,completed
+33,42,2018-02-04,Paracetamol 500mg,completed
+34,38,2018-02-06,Amoxicillin 250mg,completed
+35,80,2018-02-08,Loratadine 10mg,completed
+36,85,2018-02-10,Metformin 500mg,completed
+37,1,2018-02-10,Atorvastatin 10mg,completed
+38,51,2018-02-10,Omeprazole 20mg,completed
+39,26,2018-02-11,Simvastatin 20mg,completed
+40,33,2018-02-13,Levothyroxine 50mcg,completed
+41,99,2018-02-14,Aspirin 100mg,completed
+42,92,2018-02-16,Ibuprofen 200mg,completed
+43,31,2018-02-17,Paracetamol 500mg,completed
+44,66,2018-02-17,Amoxicillin 250mg,completed
+45,22,2018-02-17,Loratadine 10mg,completed
+46,6,2018-02-19,Metformin 500mg,completed
+47,50,2018-02-20,Atorvastatin 10mg,completed
+48,27,2018-02-21,Omeprazole 20mg,completed
+49,35,2018-02-21,Simvastatin 20mg,completed
+50,51,2018-02-23,Levothyroxine 50mcg,completed
+51,71,2018-02-24,Aspirin 100mg,completed
+52,54,2018-02-25,Ibuprofen 200mg,return_pending
+53,34,2018-02-26,Paracetamol 500mg,completed
+54,54,2018-02-26,Amoxicillin 250mg,completed
+55,18,2018-02-27,Loratadine 10mg,completed
+56,79,2018-02-28,Metformin 500mg,completed
+57,93,2018-03-01,Atorvastatin 10mg,completed
+58,22,2018-03-01,Omeprazole 20mg,completed
+59,30,2018-03-02,Simvastatin 20mg,completed
+60,12,2018-03-03,Levothyroxine 50mcg,completed
+61,63,2018-03-03,Aspirin 100mg,completed
+62,57,2018-03-05,Ibuprofen 200mg,completed
+63,70,2018-03-06,Paracetamol 500mg,completed
+64,13,2018-03-07,Amoxicillin 250mg,completed
+65,26,2018-03-08,Loratadine 10mg,completed
+66,36,2018-03-10,Metformin 500mg,completed
+67,79,2018-03-11,Atorvastatin 10mg,completed
+68,53,2018-03-11,Omeprazole 20mg,completed
+69,3,2018-03-11,Simvastatin 20mg,completed
+70,8,2018-03-12,Levothyroxine 50mcg,completed
+71,42,2018-03-12,Aspirin 100mg,shipped
+72,30,2018-03-14,Ibuprofen 200mg,shipped
+73,19,2018-03-16,Paracetamol 500mg,completed
+74,9,2018-03-17,Amoxicillin 250mg,shipped
+75,69,2018-03-18,Loratadine 10mg,completed
+76,25,2018-03-20,Metformin 500mg,completed
+77,35,2018-03-21,Atorvastatin 10mg,shipped
+78,90,2018-03-23,Omeprazole 20mg,shipped
+79,52,2018-03-23,Simvastatin 20mg,shipped
+80,11,2018-03-23,Levothyroxine 50mcg,shipped
+81,76,2018-03-23,Aspirin 100mg,shipped
+82,46,2018-03-24,Ibuprofen 200mg,shipped
+83,54,2018-03-24,Paracetamol 500mg,shipped
+84,70,2018-03-26,Amoxicillin 250mg,placed
+85,47,2018-03-26,Loratadine 10mg,shipped
+86,68,2018-03-26,Metformin 500mg,placed
+87,46,2018-03-27,Atorvastatin 10mg,placed
+88,91,2018-03-27,Omeprazole 20mg,shipped
+89,21,2018-03-28,Simvastatin 20mg,placed
+90,66,2018-03-30,Levothyroxine 50mcg,shipped
+91,47,2018-03-31,Aspirin 100mg,placed
+92,84,2018-04-02,Ibuprofen 200mg,placed
+93,66,2018-04-03,Paracetamol 500mg,placed
+94,63,2018-04-03,Amoxicillin 250mg,placed
+95,27,2018-04-04,Loratadine 10mg,placed
+96,90,2018-04-06,Metformin 500mg,placed
+97,89,2018-04-07,Atorvastatin 10mg,placed
+98,41,2018-04-07,Omeprazole 20mg,placed
+99,85,2018-04-09,Simvastatin 20mg,placed
