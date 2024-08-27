@@ -39,7 +39,7 @@ models:
       - name: customer_id
         tests:
           - not_null
-      - name: medication_name
+      - name: medication
         tests:
           - not_null
       - name: dosage
@@ -56,7 +56,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: medication_name
+      - name: medication
         tests:
           - not_null
       - name: batch_number
