@@ -4,5 +4,5 @@ instamart_bathroom_supplies_delivery:
   outputs:
     dev:
       type: duckdb
-      path: 'instamart_bathroom_supplies_delivery.duckdb'
+      path: 'yc_demo1_instamart_bathroom_supplies_delivery.duckdb'
       threads: 24
