@@ -112,11 +112,11 @@ def generate_code(branch_name, project_name, requirements_file):
     models_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models'), r'.*\.sql$')
     all_filenames = find_files_by_regex(os.getcwd(), r'.*\.(sql|md|yml|yaml|csv)$')
     file_categories = {
-        "Config Files": config_filenames,
-        "Docs Files": docs_filenames,
-        "Staging Files": staging_filenames,
-        "Staging Models Files": staging_models_filenames,
-        "Models Files": models_filenames,
+        # "Config Files": config_filenames,
+        # "Docs Files": docs_filenames,
+        # "Staging Files": staging_filenames,
+        # "Staging Models Files": staging_models_filenames,
+        # "Models Files": models_filenames,
         "All Files": all_filenames
     }
 
