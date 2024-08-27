@@ -151,24 +151,26 @@ for i, step in enumerate(execution_plan):
         # Check if edit_filenames match any of the items in all_filenames, if not create an empty file
         for filename in edit_filenames:
             if not any(filename in filepath for filepath in all_filenames):
-                abs_path = os.path.abspath(filename)
-                os.makedirs(os.path.dirname(abs_path), exist_ok=True)
-                with open(abs_path, 'w') as f:
-                    pass
-                any_new_files = True
-                # Add the new file to git tracking
-                git_add_command = f"git add {abs_path}"
-                print(f"Running shell command: {git_add_command}")
-                os.system(git_add_command)
-                # Add the new file to the    filenames in Coder
-                coder.add_rel_fname(filename)
-                # Update the repo map with the new file
-                new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
+                # Check if the file is a CSV or SQL file and if it is inside the seeds or models folder
+                if (filename.endswith('.csv') or filename.endswith('.sql')) and ('seeds' in filename or 'models' in filename):
+                    abs_path = os.path.abspath(filename)
+                    os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+                    with open(abs_path, 'w') as f:
+                        pass
+                    any_new_files = True
+                    # Add the new file to git tracking
+                    git_add_command = f"git add {abs_path}"
+                    print(f"Running shell command: {git_add_command}")
+                    os.system(git_add_command)
+                    # Add the new file to the filenames in Coder
+                    coder.add_rel_fname(filename)
+                    # Update the repo map with the new file
+                
         if any_new_files:
+            new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
             coder.run(new_msg)
-        if i%4 == 0:
+        if i % 4 == 0:
             check_success_dbt_build()
-    
 
 
 check_success_dbt_build()
