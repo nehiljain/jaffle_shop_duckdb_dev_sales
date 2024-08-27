@@ -11,6 +11,7 @@
 - `raw_inventory`: Manages medication stock levels, including batch numbers, expiration dates, and quantities.
 - `raw_shipments`: Tracks shipments, including courier details, shipment status, and delivery confirmation.
 
+Limit the data to 10 customers, 30 orders, 6 products, 3 stores, 20 deliveries.
 **Focus**:
 
 - **Prescription Validation**: Ensure all orders for prescription medications have valid prescriptions linked.

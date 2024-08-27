@@ -34,7 +34,8 @@ def clean_csv(input_file, output_file, expected_columns=5):
     return error_lines, output_file
 
 
-def swap_cleaned_csvs(coder):
+def swap_cleaned_csvs(branch_name, project_name, requirements_file, io_flag=False):
+    coder = get_coder(branch_name, project_name, requirements_file, io_flag)
     # Get all CSV files in the ./seeds/ directory
     csv_files = list(Path('./seeds/').rglob('*.csv'))
 
@@ -59,14 +60,14 @@ def swap_cleaned_csvs(coder):
 
 
 
-def check_success_dbt_build(coder):
+def check_success_dbt_build(branch_name, project_name, requirements_file, io_flag=False):
+    coder = get_coder(branch_name, project_name, requirements_file, io_flag)
     success = False
     counter = 0
     while not success:
         dbt_build_response = coder.run("/run dbt build")
         # Define the regex pattern to find the number of errors
         error_pattern = re.compile(r'\bERROR=(\d+)')
-        import pdb; pdb.set_trace()
         # Search for the pattern in the log message
         match = error_pattern.search(dbt_build_response)
         if match:
@@ -76,7 +77,7 @@ def check_success_dbt_build(coder):
             else:
                 print("No error found in dbtlog message.")
             if 'raw_' in dbt_build_response:
-                swap_cleaned_csvs(coder)
+                swap_cleaned_csvs(branch_name, project_name, requirements_file, io_flag)
             else:
                 coder.run(f"Fix the error in code. When I run dbt build I get the following error: \n {dbt_build_response}")
         else:
@@ -103,9 +104,7 @@ def find_files_by_regex(directory, pattern):
     return [str(file.relative_to(directory)) for file in Path(directory).rglob('*') if regex.match(file.name) and 'venv' not in file.parts and 'target' not in file.parts and not any(part.startswith('.') for part in file.parts)]
 
 
-def generate_code(branch_name, project_name, requirements_file):
-    requirements = load_requirements(requirements_file)
-    execution_plan = create_execution_plan(branch_name, project_name, requirements)
+def get_files_for_project():
     config_filenames = find_files_by_regex(os.getcwd(), r'.*\.(yml|yaml)$')
     docs_filenames = find_files_by_regex(os.getcwd(), r'.*\.md$')
     staging_filenames = find_files_by_regex(os.path.join(os.getcwd(), 'models/staging'), r'.*\.(sql|md|yml)$')
@@ -120,13 +119,12 @@ def generate_code(branch_name, project_name, requirements_file):
         # "Models Files": models_filenames,
         "All Files": all_filenames
     }
+    return file_categories
 
-    for category, filenames in file_categories.items():
-        print(f"{category}:")
-        for filename in filenames:
-            print(f"  - {filename}")
-
-
+def get_coder(branch_name, project_name, requirements_file, io_flag=False):
+    requirements = load_requirements(requirements_file)
+    execution_plan = create_execution_plan(branch_name, project_name, requirements)
+    file_categories = get_files_for_project()
     model = Model(
         "gpt-4o-2024-08-06",
         weak_model="gpt-4o-mini"
@@ -138,41 +136,53 @@ def generate_code(branch_name, project_name, requirements_file):
     model.reminder = "sys"
 
     # # Create a coder object
-    io = InputOutput(yes=True)
-    coder = Coder.create(auto_lint=False, main_model=model, fnames=all_filenames, io)
 
-    # # Run git checkout to switch to the new branch
-    # checkout_command = f"git checkout -b {branch_name}-{project_name}-example"
-    # print(f"Running shell command: {checkout_command}")
-    # os.system(checkout_command)
+    io = InputOutput(yes=io_flag)
+    coder = Coder.create(auto_lint=False, main_model=model, fnames=file_categories["All Files"], io=io)
+    return coder
+    
 
-    # for i, step in enumerate(execution_plan):
-    #     response = coder.run(step)
-    #     any_new_files = False
-    #     if response:
-    #         edit_filenames = extract_filenames(response)
-    #         for filename in edit_filenames:
-    #             if not any(filename in filepath for filepath in all_filenames):
-    #                 # Check if the file is a CSV or SQL file and if it is inside the seeds or models folder
-    #                 if (filename.endswith('.csv') or filename.endswith('.sql')) and ('seeds' in filename or 'models' in filename):
-    #                     abs_path = os.path.abspath(filename)
-    #                     os.makedirs(os.path.dirname(abs_path), exist_ok=True)
-    #                     with open(abs_path, 'w') as f:
-    #                         pass
-    #                     any_new_files = True
-    #                     # Add the new file to git tracking
-    #                     git_add_command = f"git add {abs_path}"
-    #                     print(f"Running shell command: {git_add_command}")
-    #                     os.system(git_add_command)
-    #                     # Add the new file to the filenames in Coder
-    #                     coder.add_rel_fname(filename)
 
-    #         if any_new_files:
-    #             new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
-    #             coder.run(new_msg)
-    #     if i%4 == 0:
-    #         check_success_dbt_build(coder)
-    check_success_dbt_build(coder)
+def generate_code(branch_name, project_name, requirements_file, io_flag=False):
+    requirements = load_requirements(requirements_file)
+    execution_plan = create_execution_plan(branch_name, project_name, requirements)
+    file_categories = get_files_for_project()
+    coder = get_coder(branch_name, project_name, requirements_file, io_flag)
+    
+    # Run git checkout to switch to the new branch
+    checkout_command = f"git checkout -b {branch_name}-{project_name}-example"
+    print(f"Running shell command: {checkout_command}")
+    os.system(checkout_command)
+
+    for i, step in enumerate(execution_plan):
+        response = coder.run(step)
+        any_new_files = False
+        if response:
+            edit_filenames = extract_filenames(response)
+            for filename in edit_filenames:
+                if not any(filename in filepath for filepath in file_categories["All Files"]):
+                    # Check if the file is a CSV or SQL file and if it is inside the seeds or models folder
+                    if (filename.endswith('.csv') or filename.endswith('.sql')) and ('seeds' in filename or 'models' in filename):
+                        abs_path = os.path.abspath(filename)
+                        os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+                        with open(abs_path, 'w') as f:
+                            pass
+                        any_new_files = True
+                        # Add the new file to git tracking
+                        git_add_command = f"git add {abs_path}"
+                        print(f"Running shell command: {git_add_command}")
+                        os.system(git_add_command)
+                        # Add the new file to the filenames in Coder
+                        coder.add_rel_fname(filename)
+
+            if any_new_files:
+                new_msg = f"Recreate the response ONLY for skipped files in previous response: \n {response}. The task to solve is {step}."
+                coder.run(new_msg)
+        if i%4 == 0:
+            check_success_dbt_build(branch_name, project_name, requirements_file, io_flag)
+    check_success_dbt_build(branch_name, project_name, requirements_file, io_flag)
 
 if __name__ == "__main__":
     generate_code()
+    
+    
